@@ -44,7 +44,8 @@ NSString *const kFLDataSourcePersonsKey = @"users";
 				
 				if ([theSelf.delegate respondsToSelector:@selector(dataSource:didFinishLoadingWithError:)])
 				{
-					[theSelf.delegate dataSource:theSelf didFinishLoadingWithError:anError ? anError : theError];
+					theError = (anError && anError.code != -999 )? anError : theError; // scip "user cancel" errors
+					[theSelf.delegate dataSource:theSelf didFinishLoadingWithError:theError];
 				}
 		}];
 	}

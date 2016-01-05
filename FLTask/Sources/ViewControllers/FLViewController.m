@@ -74,7 +74,11 @@ static NSString *sCellIdentifier = @"FLTableViewCell";
 	if (nil == anError)
 	{
 		[self.tableView reloadData];
-	}	
+	}
+	else
+	{
+		[self showMessageWithError:anError];
+	}
 }
 
 - (void)dataSourceWillStartLoading:(FLDataSource *)aDataSource
@@ -100,20 +104,26 @@ static NSString *sCellIdentifier = @"FLTableViewCell";
 	[theCell.iconImageView setImageWithURL:[thePerson imageURL] placeholderImage:[UIImage imageNamed:@"userpic"]];
 }
 
-- (void)showErrorMessage
+- (void)showMessageWithError:(NSError *)anError
 {
+	self.errorMessageLabel.hidden = NO;
+	self.tableView.hidden = YES;
+	[self.activityIndicator stopAnimating];
 	
+	self.errorMessageLabel.text = [anError localizedDescription];
 }
 
 - (void)updateUIBeforeLoading
 {
 	self.tableView.hidden = YES;
+	self.errorMessageLabel.hidden = YES;
 	[self.activityIndicator startAnimating];
 }
 
 - (void)updateUIAfterLoading
 {
 	[self.activityIndicator stopAnimating];
+	self.errorMessageLabel.hidden = YES;
 	self.tableView.hidden = NO;
 }
 
